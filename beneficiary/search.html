@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      New Request
+    </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="/Blinx/bootstrap-3.3.5-dist/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/Blinx/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
+	
+	<!-- DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="/Blinx/bootstrap-3.3.5-dist/css/jquery.dataTables.css">
+<link rel="stylesheet" type="text/css" href="/Blinx/bootstrap-3.3.5-dist/css/select.dataTables.css">
+<link rel="stylesheet" href="../bootstrap-3.3.5-dist/css/bootstrap.min.css" type="text/css"/>
+<link rel="stylesheet" href="../bootstrap-3.3.5-dist/css/bootstrap.min.css" type="text/css">
+  
+<!-- DataTables -->
+<script type="text/javascript" charset="utf-8" src="/Blinx/bootstrap-3.3.5-dist/js/jquery.dataTables.js"></script>
+<script type="text/javascript" src="/Blinx/bootstrap-3.3.5-dist/js/dataTables.select.js"></script>
+	<script>
+  	$(document).ready(function(){
+	/*
+		// 2nd option
+		var table = $('#table_id_1').DataTable();
+		//$('#searchResultTable').DataTable();
+		$.ajax(
+			url:"",
+			success:function(result){
+				var d = result.data;
+				var d1 = parseData(d);
+				table.setData(d1);
+			},
+			fail:function(){}
+		);
+		*/
+		// 1st option : using DataTable API
+		$("#radioMatch").prop("checked", true);
+		
+		var dataString = {'searchdata':"",'searchMethod':'1'};
+		var table = $('#searchResultTable').DataTable({
+						"paging":   false,
+						"ordering": false,
+						"info":     false,
+						"serverSide": false,
+						"searching":false,
+						"select": {style: 'single'},
+						"ajax":{ 	"type": "POST",
+									"url":"/Blinx/php/bsearch.php",
+									"data": dataString ,
+									"dataType": "json"
+								},
+						"columns": [
+										{ "data": "first_name" },
+										{ "data": "last_name" },
+										{ "data": "email_id" },
+										{ "data": "mobile_number" },
+										{ "data": "user_id" }
+									]
+					});
+		
+	  	$("#btnsearch").click(function () {
+			var dataString={'searchdata':"",'searchMethod':'1'};;
+			var value=$("#search").val();
+			if($("#radioMatch").is(":checked")==true)
+			{
+				dataString = {'searchdata':value,'searchMethod':'0'};
+				alert(dataString);
+			}
+			else if($("#radioStart").is(":checked")==true)
+			{
+				dataString = {'searchdata':value,'searchMethod':'1'};
+				
+			}
+			else
+				dataString = {'searchdata':value,'searchMethod':'2'};
+		table.destroy();
+		table=$('#searchResultTable').DataTable({
+						"paging":   false,
+						"ordering": false,
+						"info":     false,
+						"serverSide": false,
+						"searching":false,
+						"select": {style: 'single'},
+						"ajax":{ 	"type": "POST",
+									"url":"/Blinx/php/bsearch.php",
+									"data": dataString ,
+									"dataType": "json"
+								},
+						"columns": [
+									{ "data": "first_name" },
+									{ "data": "last_name" },
+									{ "data": "email_id" },
+									{ "data": "mobile_number" },
+									{ "data": "user_id" }
+									]
+					});
+						
+		});
+		var selectedRowData="10";
+		$('#searchResultTable tbody').on( 'click', 'tr', function (evt)  
+                {
+                      selectedRowData=table.row( this ).data();
+                      console.log(selectedRowData.user_id);
+															
+                } );
+		//
+		$("#createRequest").on("click",function(evt){
+			evt.preventDefault();
+			var newURL = "/Blinx/beneficiary/UserProfile.html?mphone="+selectedRowData.mobile_number+"";
+			window.location = newURL;
+		});
+	});
+	
+    </script> 
+    <style>
+    label.invalid
+{
+    color: Red;
+    font-style: italic;
+    padding: 1px;
+    margin: 0px 0px 0px 5px;
+}
+row {
+    margin-top: 10px;
+}
+ul li{
+ height: 30px;
+ border: 1px solid #ccc;
+ background: white;
+ font-family: verdana;
+ list-style-type: none;
+ list-style-position: outside;
+ list-style-image: none;
+}
+ul li:hover{
+ background: lightblue;
+ cursor: pointer;
+}
+.top-buffer { margin-top:20px; }
+</style>
+    </head>
+ <body>
+   <div class="container">
+	  
+      <div class="row">
+         <div class="col-lg-12 col-lg-offset-4" ><h2>Search Benificiry</h2></div>
+      </div>
+	  <div class="row"> 
+		<label class="radio-inline"><input type="radio" id="radioMatch" name="optradio">Match Word</label>
+		<label class="radio-inline"><input type="radio" id="radioStart" name="optradio">Start WIth</label>
+		<label class="radio-inline"><input type="radio" id="radioEnd"  name="optradio">End With</label>
+	  </div>
+      <div class="row top-buffer">
+        <div>
+          <div class="input-group">
+            <input type="text" id="search" class="form-control" placeholder="Search by name or number">
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button" id="btnsearch">Search</button>
+            </span>
+          </div><!-- /input-group -->
+        </div><!-- /.col-lg-6 -->
+      </div> 
+      <div class="row top-buffer">
+        <div class="panel panel-default">
+    <!-- Default panel contents -->
+          <div class="panel-heading">Search Result</div>
+          <!-- Table -->
+		  <div class="container table-responsive">
+          <table class="table table-striped" id="searchResultTable">
+            <thead>
+				<tr>
+					<th data-toggle="true">First Name</th>
+					<th>Last Name</th>
+					<th>E-mail</th>
+					<th>Mobile Number</th>
+					<th>AAA</th>
+				</tr>
+			</thead>
+          </table>
+		  </div>
+        </div>
+      </div> 
+	  <div class="row top-buffer col-lg-offset-5"> 
+	  <a type="button" class="btn btn-primary" id="createRequest" href="">Continue</a>
+	  </div>
+  </div>
+ </body>
+</html>                 

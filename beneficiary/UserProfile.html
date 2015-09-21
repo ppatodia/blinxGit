@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      New Request
+    </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/Blinx/bootstrap-3.3.5-dist/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    
+	<script type="text/javascript" src="/Blinx/bootstrap-3.3.5-dist/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/Blinx/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
+      <script>
+	   function initialize()
+	   {
+			var mphone=GetURLParameter('mphone');
+			var dataString = {'searchdata':mphone,'searchMethod':'0'};
+			$.ajax({
+            type: "POST",
+            url:"/Blinx/php/bsearch.php",
+			data:dataString,
+            dataType: "json",
+            success: function (msg) {
+					$('#firstname').val(msg.data[0]['first_name']);
+					$('#lastname').val(msg.data[0]['last_name']);
+					$('#useremail').val(msg.data[0]['email_id']);
+					$('#phone').val(msg.data[0]['mobile_number']);
+					$('#altphone').val(msg.data[0]['alternative_mobile_number']);
+					$('#DOB').val(msg.data[0]['date_of_birth']);
+					$('#gender').val(msg.data[0]['gender']);
+					$('#qualification').val(msg.data[0]['qualification']);
+					$('#institute').val(msg.data[0]['institution']);
+					$('#occupation').val(msg.data[0]['occupation']);
+					$('#state').val(msg.data[0]['state']);
+					$('#district').val(msg.data[0]['district']);
+					$('#location').val(msg.data[0]['location']);
+					$('#address').val(msg.data[0]['address']);
+                }
+          });
+
+			
+        }
+    </script>
+	<script type="text/javascript">
+	function GetURLParameter(sParam)
+	{
+		var sPageURL = window.location.search.substring(1);
+		var sURLVariables = sPageURL.split('&');
+		for (var i = 0; i < sURLVariables.length; i++) 
+		{
+			var sParameterName = sURLVariables[i].split('=');
+			if (sParameterName[0] == sParam) 
+			{
+				return sParameterName[1];
+			}
+		}
+	};
+	</script>
+      <script>
+      /*$.validator.addMethod("regex", function(value, element, regexpr) {          
+    return regexpr.test(value);
+}, "Please enter a valid pasword.");
+      $.validator.addMethod("zipcode", function(value, element) {
+  return this.optional(element) || /^\d{6}(?:-\d{4})?$/.test(value);
+}, "Please provide a valid zipcode.");*/
+	  $(document).ready(function(){
+	 	 $("#createRequest").on("click",function(evt){
+			evt.preventDefault();
+			var newURL = "/Blinx/beneficiary/newrequest.html?mphone="+$('#phone').val()+"&email="+$('#useremail').val()+"";
+			window.location = newURL;
+		});
+      });
+	  </script> 
+	  <style>
+	  label.invalid
+{
+    color: Red;
+    font-style: italic;
+    padding: 1px;
+    margin: 0px 0px 0px 5px;
+}
+row {
+    margin-top: 10px;
+}
+ul li{
+ height: 30px;
+ border: 1px solid #ccc;
+ background: white;
+ font-family: verdana;
+ list-style-type: none;
+ list-style-position: outside;
+ list-style-image: none;
+}
+ul li:hover{
+ background: lightblue;
+ cursor: pointer;
+}
+.top-buffer { margin-top:20px; }
+</style>
+    </head>
+ <body onLoad="initialize()">
+  <div class="container">
+    <form class="form-horizantal" id="requestform" name="requestform" method='post' action="">
+     <div class="row">
+       <div class="col-md-12 col-md-offset-6"><h2>Benificiry Profile</h2></div>
+    </div>
+      <div class="row">
+   </div>
+        <fieldset>
+           <legend>Benificiary Information</legend>
+            <div class="row" >
+	            <div class="offset5">
+	                <div class="form-group">
+	                 <label for="firstname" class="col-md-1">
+                      First Name:
+                     </label>
+                     <div class="col-md-3">
+                     <input type="text" class="form-control" name="firstname" id="firstname" placeholder="First Name" disabled>
+                     </div>
+ 	                 <label for="lastname" class="col-md-1">
+                     Last Name:
+                     </label>
+                     <div class="col-md-3">
+                     <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Last Name" disabled>
+                     </div>
+					  <label for="useremail" class="col-md-1">
+						Email address:
+					  </label>
+					  <div class="col-md-3">
+						<input type="text" class="form-control" id="useremail" name="useremail" placeholder="email address" disabled>
+					  </div>
+                    </div>
+	            </div>
+	        </div>
+	        <div class="row">
+	            <div class="offset5">
+	                 <div class="form-group">
+					  <label for="phone" class="col-md-1">
+						MobilePhone:
+					  </label>
+					  <div class="col-md-3">
+						<input type="text" class="form-control" id="phone" name="phone" placeholder="Monbile Phone" Maxlength="20" disabled>
+					  </div>
+					  <label for="altphone" class="col-md-1">
+						Alternate MobilePhone:
+					  </label>
+					  <div class="col-md-3">
+						<input type="text" class="form-control" id="altphone" name="altphone" placeholder="Alternate Monbile Phone" Maxlength="20" disabled>
+					  </div>
+					  <label for="DOB" class="col-md-1">
+						DOB:
+					  </label>
+					  <div class="col-md-3">
+						<input type="text" class="form-control" id="DOB" name="DOB" placeholder="Date Of Birth" Maxlength="20" disabled>
+					  </div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+	            <div class="offset5">
+	                 <div class="form-group">
+					  <label for="gender" class="col-md-1">
+						Gender:
+					  </label>
+					  <div class="col-md-3">
+						<input type="text" class="form-control" id="gender" name="gender" placeholder="Gender" Maxlength="20" disabled>
+					  </div>
+					  <label for="gender" class="col-md-1">
+						Qualification:
+					  </label>
+					  <div class="col-md-3">
+						<input type="text" class="form-control" id="qualification" name="qualification" placeholder="Qualification" Maxlength="20" disabled>
+					  </div>
+					  <label for="institute" class="col-md-1">
+						Institution:
+					  </label>
+					  <div class="col-md-3">
+						<input type="text" class="form-control" id="institute" name="institute" placeholder="Institute" Maxlength="20" disabled>
+					  </div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+	            <div class="offset5">
+	                 <div class="form-group">
+					  <label for="occupation" class="col-md-1">
+						Occupation:
+					  </label>
+					  <div class="col-md-3">
+						<input type="text" class="form-control" id="occupation" name="occupation" placeholder="Job" Maxlength="20" disabled>
+					  </div>
+					  <label for="state" class="col-md-1">
+						State:
+					  </label>
+					  <div class="col-md-3">
+						<input type="text" class="form-control" id="state" name="state" placeholder="State" Maxlength="20" disabled>
+					  </div>
+					  <label for="district" class="col-md-1">
+						District:
+					  </label>
+					  <div class="col-md-3">
+						<input type="text" class="form-control" id="district" name="district" placeholder="District" Maxlength="20" disabled>
+					  </div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+	            <div class="offset5">
+	                 <div class="form-group">
+					  <label for="location" class="col-md-1">
+						Location:
+					  </label>
+					  <div class="col-md-3">
+						<input type="text" class="form-control" id="location" name="location" placeholder="Location" Maxlength="20" disabled>
+					  </div>
+					  <label for="address" class="col-md-1">
+						Address:
+					  </label>
+					  <div class="col-md-3">
+						<input type="text" class="form-control" id="address" name="address" placeholder="Address" Maxlength="20" disabled>
+					  </div>
+					  <label for="district" class="col-md-1">
+						District:
+					  </label>
+					  <div class="col-md-3">
+						<input type="text" class="form-control" id="district" name="district" placeholder="District" Maxlength="20" disabled>
+					  </div>
+					</div>
+				</div>
+			</div>
+	    </fieldset>
+		<div class="row top-buffer"> 
+	  <a type="button" class="btn btn-primary" id="createRequest" href="">Create Request</a>
+	  <button type="button" class="btn btn-primary" id="EditeRequest">Edit Request</button>
+	  <button type="button" class="btn btn-primary" id="Edit Profile">Update Profile</button>
+	  </div>
+   </form>
+   </div>
+</body>
+</html>									

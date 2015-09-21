@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      New Request
+    </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/Blinx/bootstrap-3.3.5-dist/css/bootstrap.min.css" rel="stylesheet" media="screen">
+   <link rel="stylesheet" href="/Blinx/bootstrap-3.3.5-dist/css/bootstrap-datetimepicker.min.css" />
+   <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
+    <!-- <script type="text/javascript" charset="utf8" src="/bootstrap-3.3.5-dist/js/jquery.js"></script> -->
+   <script type="text/javascript" src="/Blinx/bootstrap-3.3.5-dist/js/jquery.min.js"></script>
+   <script type="text/javascript" src="/Blinx/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
+   <script type="text/javascript" src="/Blinx/bootstrap-3.3.5-dist/js/Moment.js"></script>
+   <script type="text/javascript" src="/Blinx/bootstrap-3.3.5-dist/js/bootstrap-datetimepicker.min.js"></script>
+
+    <script>
+    /*       var place2,place1;
+            function initialize() {
+            var input = document.getElementById('autocomplete');
+            var options = {componentRestrictions: {country: 'in'}};
+            var autocomplete=new google.maps.places.Autocomplete(input, options);
+			google.maps.event.addListener(autocomplete,'place_changed', function()
+{
+    /* Get place details */
+    /* place1 = autocomplete.getPlace().address_components[0].long_name;
+     place2= autocomplete.getPlace().address_components[1].long_name;
+    /* Do something with place information */
+/*});*/
+            
+		/*	$('#location').hide();
+		    $('#autocomplete').show();
+			$('#ruseremail').val(GetURLParameter('email'));
+			$('#rphone').val(GetURLParameter('mphone'));
+        }*/
+var Uid="";
+var place2;
+var latitude="";
+var place2;
+var longitude="";
+	   function initialize()
+	   {
+            var input = document.getElementById('autocomplete');
+            var options = {componentRestrictions: {country: 'in'}};
+            var autocomplete=new google.maps.places.Autocomplete(input, options);
+            google.maps.event.addListener(autocomplete,'place_changed', function()
+{
+    /* Get place details */
+    var inputA = document.getElementById('autocomplete').value;
+     place1 = autocomplete.getPlace().address_components[0].long_name;
+     place2= autocomplete.getPlace().address_components[1].long_name;
+     var geocoder = new google.maps.Geocoder();
+            geocoder.geocode({
+            'address': inputA
+            }, function(results, status) {
+                if (status === google.maps.GeocoderStatus.OK) 
+                {
+                    latitude=results[0].geometry.location.lat();    
+                    longitude=results[0].geometry.location.lng(); 
+                    alert("Latitude: " + latitude + "\nLongitude: " + longitude);
+                }
+            });
+    /* Do something with place information */
+});
+                        FillHelpData();
+			FillCourseData();
+			$('#location').hide();
+		        $('#autocomplete').show();
+			$('#ruseremail').val(GetURLParameter('email'));
+			$('#rphone').val(GetURLParameter('mphone'));
+			var mphone=GetURLParameter('mphone');
+			var dataString = {'searchdata':mphone,'searchMethod':'0'};
+			$.ajax({
+            type: "POST",
+            url:"/Blinx/php/bsearch.php",
+			data:dataString,
+            dataType: "json",
+            success: function (msg) {
+					Uid=msg.data[0]['user_id'];
+					$('#ruseremail').val(msg.data[0]['email_id']);
+					$('#rphone').val(msg.data[0]['mobile_number']);
+					$('#location').val(msg.data[0]['location']);
+					$('#address').val(msg.data[0]['address']);
+                }
+          });
+       }
+
+	function GetURLParameter(sParam)
+	{
+		var sPageURL = window.location.search.substring(1);
+		var sURLVariables = sPageURL.split('&');
+		for (var i = 0; i < sURLVariables.length; i++) 
+		{
+			var sParameterName = sURLVariables[i].split('=');
+			if (sParameterName[0] == sParam) 
+			{
+				return sParameterName[1];
+			}
+		}
+	};
+
+           function FillHelpData() {
+		$.ajax({
+            type: "POST",
+            url:"/Blinx/php/help.php",
+            dataType: "json",
+            success: function (msg) {
+                $.each(msg.data,function(key,value)
+               {	
+					$("#service").append($("<option></option>").val(value['Id']).html(value['Description']));
+               });  
+                }
+          });
+	};
+
+	function FillCourseData() {
+   $.ajax({
+            type: "POST",
+            url:"/Blinx/php/coursedata.php",
+            dataType: "json",
+            success: function (msg) {
+                $.each(msg.data,function(key,value)
+               {
+                     $("#education").append($("<option></option>").val(value['Id']).html(value['Description']));
+                     //alert(data[i].Description);
+               });  
+                }
+          });
+};
+
+      /*$.validator.addMethod("regex", function(value, element, regexpr) {          
+    return regexpr.test(value);
+}, "Please enter a valid pasword.");
+      $.validator.addMethod("zipcode", function(value, element) {
+  return this.optional(element) || /^\d{6}(?:-\d{4})?$/.test(value);
+}, "Please provide a valid zipcode.");*/
+	  $(document).ready(function(){
+	  var newDate = new Date();
+      newDate.setDate(newDate.getDate() + 180);
+	   $("#servicedate").datetimepicker({ format: 'DD-MM-YYYY hh:mm:ss'});
+	  //$('#servicedate').datetimepicker('setDate', new Date());
+	  /*
+	  $('#servicedate').datetimepicker().on('changeDate', function(ev){
+                 var requestedDate=$('#servicedate').val();
+				var today=new Date();
+                 var todaydate=new Date();
+                 todaydate.setDate(today.getDate());
+                 todaydate.setMonth(today.getMonth());
+                 todaydate.setYear(today.getFullYear());
+		 if(ev.date<=todaydate)
+                   {
+                        alert("Sorry requested should be greaterthan today date");
+                   }
+       });
+	   */
+	  /*$('#requestform').validate({
+        rules: {
+            rpincode: {
+
+				zipcode: true
+            },
+           servicedate: {
+				required: true
+            },
+            autocomplete: {
+				required: true
+            },
+        },
+		messages: {
+		rpincode: { required:"Please enter valid pincode"},
+		servicedate: { required:"Please enter valid service date"},
+		autocomplete: { required:"Your Location is required"},
+    },
+                errorClass:"invalid",
+				validClass: "success",
+				errorElement: "label",
+				submitHandler: function() {
+                    var bid= $("#bid").val();
+					var locatin= $("#location").val();
+					var locationarr = locatin.split(',');
+					var place1=locationarr[0];
+					var place2=locationarr[1];
+					var phone1= $("#rphone").val();
+					var email1= $("#useremail").val();
+                    var servicedate= $("#servicedate").val();
+					var address= $("#address").val();
+					var message= $("#message").val();
+                    var pincode1= $("#rpincode").val();
+                    var dataString = '&phone='+ phone1+ '&bid='+ bid+ '&helpdescription=' + $("#service option:selected").text()+ '&email=' + email1+'&address=' + address+'&requesteddate=' + servicedate;
+                                        dataString = dataString + '&location1='+ place1+ '&location2='+ place2+ '&pincode=' + pincode1+ '&message='+ message+'&helpvalue=' +  $("#service option:selected").val();
+                                        //alert(dataString);
+                                        $.ajax({
+							type: "POST",
+							url: "requestprocess.php",
+							data: dataString, 
+							success : function(msg) {
+                                                                                          alert(msg);
+                                                                                },
+                                                        error: function() {
+                                                                                        alert('failure');
+                                                                          },
+							 });
+				 
+				 	 }
+      });*/
+	  $('input:radio[name="communicationdata"]').change(
+      function(){
+       if ($(this).val() == 'existingaddress') {
+
+           $('#location').show();
+		    $('#autocomplete').hide();
+			$('#rphone').val(GetURLParameter('mphone'));
+			$('#ruseremail').val(GetURLParameter('email'));
+        }
+        else {
+			   $('#rphone').val('');
+			   $('#ruseremail').val('');
+			   $('#autocomplete').val('');
+			   $('#location').hide();
+		       $('#autocomplete').show();
+        } 
+      });
+	  $("#submit").on("click",function(evt){
+		evt.preventDefault();
+			//alert('click');
+			var service = document.getElementById("service");
+			//var service = $("#service");
+			var education = document.getElementById("education");
+			var a=document.getElementById("message");
+			var b=document.getElementById("address");
+			var message=a.value;
+			var address=b.value;
+			var strHelpID="";
+			var strEducationID="";
+			strHelpID = service.options[service.selectedIndex].value;
+			strEducationID = education.options[education.selectedIndex].value;
+			//alert($("#servicedate").find("input").val());
+			var dataString = 'Uid='+ Uid+ '&email='+ $('#ruseremail').val()+
+			'&phone=' + $('#rphone').val()+ '&helpId=' + strHelpID+'&message=' +message+
+			'&address=' + address +'&location1='+ place1+
+			'&location2='+ place2+ '&requesteddate=' + $("#servicedate").find("input").val()+
+			'&education=' +  strEducationID+ '&lat=' + latitude+'&long=' + longitude+'';
+					//alert(dataString);
+			$.ajax({
+				url:"/Blinx/php/requestprocess.php",
+				type: "POST",
+				datatype: "text",
+				data:dataString,
+				success: function (msg) {
+					alert("Success");
+				},
+				error: function(error){
+					console.log('ERROR',error);
+				}
+			});
+			//
+			return false;
+		  });
+		});
+
+	  </script> 
+	  <style>
+	  /*
+	  label.invalid
+{
+    color: Red;
+    font-style: italic;
+    padding: 1px;
+    margin: 0px 0px 0px 5px;
+}
+#.custom-search-form{
+    margin-top:5px;
+}
+row {
+    margin-top: 10px;
+}
+ul li{
+ height: 30px;
+ border: 1px solid #ccc;
+ background: white;
+ font-family: verdana;
+ list-style-type: none;
+ list-style-position: outside;
+ list-style-image: none;
+}
+ul li:hover{
+ background: lightblue;
+ cursor: pointer;
+}
+*/
+</style>
+    </head>
+ <body onLoad="initialize()">
+   <div class="container">
+    <form class="form-horizantal" id="requestform" name="requestform" method='post' action="">
+     <div class="row">
+       <div class="col-md-12 col-md-offset-6"><h2>New Request</h2></div>
+    </div>
+      <div class="row"></div>
+        <fieldset>
+            <legend>Request</legend>
+	        <div class="row">
+				<div class="offset5">
+					<div class="form-group">
+					 <label for="communicationdata" class="col-md-2">
+						Address:
+					  </label>
+					  <div class="col-md-10">
+						<label class="radio">
+						  <input type="radio" name="communicationdata" id="existing" value="existingaddress" checked>
+						  Use Registered data for communication
+						</label>
+						<label class="radio">
+						  <input type="radio" name="communicationdata" id="new" value="newaddress">
+						  Change communication data
+						</label>
+					  </div>
+					</div>
+				</div>
+			</div>
+	        <div class="row">
+				<div class="offset5">
+					<div class="form-group">
+					  <label for="service" class="col-md-1">
+						Service Date:
+					  </label>
+						<div class="col-md-5">
+						<div class='input-group date' id='servicedate'>
+							<input type='text' class="form-control" />
+							<span class="input-group-addon">
+								<span class="glyphicon glyphicon-calendar"></span>
+							</span>
+						</div>
+						</div>
+					  <label for="service" class="col-md-1">
+						Service:
+					  </label>
+					  <div class="col-md-5">
+						<select name="service" id="service" class="form-control">
+						</select>
+					  </div>
+					</div>
+				</div>
+			</div>
+	        <div class="row">
+			     <div class="offset5">
+					<div class="form-group">
+					   <label for="autocomplete" class="col-md-1">
+					    Location:
+						 </label>
+						 <div class="col-md-5">
+							<input type="text" class="form-control" id="autocomplete" name="autocomplete" placeholder="Choose Location">
+							<input type="text" class="form-control" id="location" name="location" placeholder="Choose Location">
+						 </div>
+						 <label for="rpincode" class="col-md-1">
+							Education:
+						 </label>
+						 <div class="col-md-5">
+							<select name="education" id="education" class="form-control">
+						</select>
+						 </div>
+					 </div>
+				</div>
+			</div>
+	         <div class="row">
+				<div class="offset5">
+					 <div class="form-group">
+					  <label for="ruseremail" class="col-md-1">
+						Email address:
+					  </label>
+					  <div class="col-md-5">
+						<input type="text" class="form-control" id="ruseremail" name="ruseremail" placeholder="email address" >
+					  </div>
+					  <label for="rphone" class="col-md-1">
+						MobilePhone:
+					  </label>
+					  <div class="col-md-5">
+						<input type="text" class="form-control" id="rphone" name="rphone" placeholder="Monbile Phone" Maxlength="20">
+					  </div>
+					</div>
+				</div>
+			</div>
+	         <div class="row">
+				<div class="offset5">
+					<div class="form-group">
+					 <label for="address" class="col-md-1">
+						Address:
+					  </label>
+						  <div class="col-md-5">
+						   <textarea name="address" id="address" rows="5" cols="60"  placeholder="Address" ></textarea>
+						  </div>
+						  <label for="message" class="col-md-1">
+						Message:
+					  </label>
+						  <div class="col-md-5">
+						   <textarea name="message" id="message" rows="5" cols="60"  placeholder="Message" ></textarea>
+						  </div>
+					</div>
+				</div>
+			</div>
+	        <div class="row">
+				<div class="offset5">
+					<div class="form-group">
+					  <div class="offset5 col-md-5">
+						<button class="btn btn-primary" type="button" id="submit">Submit</button>
+					  </div>
+					  </div>
+				</div>
+			</div>
+	    </fieldset>
+   </form>
+   </div>
+</body>
+</html>									
