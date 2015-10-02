@@ -26,7 +26,8 @@
             var allLocations = [];
             var allCoordenates=[];
             var pointer=0;
-            var blocationData="";
+            var bData="";
+            var blocationData=[];
             function initialize()
 	   {
                 var input = document.getElementById('autocomplete');
@@ -44,10 +45,10 @@
                             {
                                 latitude=results[0].geometry.location.lat();    
                                 longitude=results[0].geometry.location.lng(); 
-                                alert("Latitude: " + latitude + "\nLongitude: " + longitude);
+                                /*alert("Latitude: " + latitude + "\nLongitude: " + longitude);*/
                             }
                         });
-                        		var dataString = {'lat':'','lng':''};
+                        		/*var dataString = {'lat':'','lng':''};
 		 table = $('#searchResultTable').DataTable({
 						"paging":   false,
 						"ordering": false,
@@ -66,7 +67,7 @@
                                                                 { "data": "longitude" },
                                                                 { "data": "UserId" }
                                                             ]
-                                                    });
+                                                    });*/
     /* Do something with place information */
            });
             };
@@ -74,7 +75,8 @@
   	$(document).ready(function(){
 	  	$("#btnsearch").click(function () 
                 {
-		var dataString = {'lat':latitude,'lng':longitude};
+		/*var dataString = {'lat':latitude,'lng':longitude};*/
+                var dataString = {'lat':'12.9381776','lng':'77.62282519999997'};
                	$.ajax({
                                 url:"/Blinx/php/blocationsearch.php",
                                 type: "POST",
@@ -83,10 +85,10 @@
                                 success: function (msg) 
                                 {
                                     var JSONObject = JSON.parse(msg);
-                                    blocationData=JSONObject["data"];
+                                    bData=JSONObject["data"];
                                     $.each(JSONObject["data"], function(i, item)
                                     {
-                                        alert("Mine is " + i + "|" + item.latitude + "|" + item.longitude);
+                                        /*alert("Mine is " + i + "|" + item.latitude + "|" + item.longitude);*/
                                          tmp = {
                                                     'lat': item.latitude,
                                                     'lng': item.longitude
@@ -97,8 +99,8 @@
                                     });
                                     /*var jsonCoordinates=json_encode(allCoordenates);*/
                                     getLocationDetails(allCoordenates[0])
-                                    alert("Success");
-                                    alert(msg);
+                                    /*alert("Success");
+                                    alert(msg);*/
                                 },
                                 error: function(error)
                                 {
@@ -145,6 +147,7 @@
 {
     var url1="http://maps.googleapis.com/maps/api/geocode/json?latlng="+
         jsonObj.lat+","+jsonObj.lng+"&sensor=true";
+
 /*var dataString = {'latlng':jsonObj.lat+","+jsonObj.lng,'sensor':true};*/
         $.ajax({
                                 url:url1,
@@ -152,13 +155,14 @@
                                 datatype: "json",
                                 success: function (msg) 
                                 {
-                                    console.log('Success',msg);
-                                    console.log('Success',msg.results[0].formatted_address);
+                                    /*console.log('Success',msg);
+                                    console.log('Success',msg.results[0].formatted_address);*/
                                     tmp1 = {
                                                     'location': msg.results[0].formatted_address,
                                                };
                                     allLocations.push(tmp1);
-                                    blocationData[pointer].['location']=msg.results[0].formatted_address;
+                                    /*var obj = JSON.parse( bData[pointer] );
+                                    bData[pointer]['location']=== msg.results[0].formatted_address;*/
                                     increaseIndex();
                                 },
                                 error: function(error)
@@ -211,14 +215,78 @@
 function increaseIndex()
 {
 	pointer++;
-	if(pointer<=allCoordenates.length){
+	if(pointer<allCoordenates.length){
 		getLocationDetails(allCoordenates[pointer]);
 	}else{
-		// got all locations
-		console.log(allLocations);
-		//fillGrid();
-	}
-};
+            /*alert("Results");*/
+		                       $.each(bData, function(i, item)
+                                    {
+                                           /*lert("Mine is " + i + "|" + item.latitude + "|" + item.longitude);*/
+                                         tmp1 = {
+                                                    'location': allLocations[i].location,
+                                                    'distance':item.distance,
+                                                    'UserID':item.UserId,
+                                                    'Id':item.Id,
+                                                    'Description':item.Description,
+                                                    'ServideDate':item.Requesteddate,
+                                                    'Name':item.Name,
+                                                    "Message":item.Message
+                                                    
+                                               };
+                                    blocationData.push(tmp1);
+                                        /*allCoordenates.push(tmp);
+                                        var location=getLocationDetails(item.latitude,item.longitude);
+                                        alert(location);*/
+                                    });
+                                    
+                                    /*$('#searchResultTable').dataTable( {
+                                        "aaData":blocationData,
+                                            "aoColumns": [
+                                                { "mData": "location" },
+                                                { "mData": "distance" },
+                                                { "mData": "Name" },
+                                                { "mData": "Id" },
+                                                { "mData": "ServideDate" },
+                                                { "mData": "Description" },
+                                                { "mData": "Message" }
+                                            ]
+                                            });*/
+            var htmlText = '';
+             $.each(blocationData,function(key,value)
+            {
+                /*
+                var divText = '<div  class="results-section-wrapper"> '+
+                              '<div  class="results"> <div class="result-details"> ' +
+                              '<div class="result-details-line">'
+                              '<div class="result-title">'+blocationData[key].UserID+'</div> '+
+                              '</div><div class="result-details-line"> '+
+                              '<div class="result-tags">'+blocationData[key].helpdescription+'</div>'+
+                              '</div> <div class="result-text">'+blocationData[key].message+'</div>'+
+                              '<div class="result-chef-dets"> <span class="order-by">Request Placed on :<span class="time">'
+                              +blocationData[key].creationdatetime+' </span></span><span class="ready-by">Requed to be completed By:'+
+                              '<span class="time">'+blocationData[key].requesteddatetime+'</span> '+
+                              '</span></div></div><div class="result-right"'+
+                              '<div class="result-btn">Accept</div></div> </div> </div>';
+                      */
+                     var divText="<div class='design-display' ><div style='width : 90%; float:left; color:#AAAAAA'>"+
+                                 "<div> <span style='font-size: 20px;color:#000000'>"+blocationData[key].Name+"</div>"+
+                                 "<div> <span style='font-size: 14px;color:#AAAAAA'> Type of service : </span> "+
+                                 "<span style='margin-right: 10px ; font-size: 14px;color:#000000'>"+blocationData[key].Description+"</span>"+
+                                 "<span style='font-size: 14px;color:#AAAAAA'>Service Date:</span>"+
+                                 "<span style='font-size: 14px;color:#000000'>"+blocationData[key].ServideDate+"</span>"+
+                                 "</div>"+
+                                 "<div>"+blocationData[key].location+"</div>"+
+                                 "<div>"+blocationData[key].Message+"</div>"+
+                                 "</div>"+
+                                "<button class='btn btn btn-success' type='button' style='float : left; margin-top:30px;'>Accept</button></div>";
+			    htmlText = htmlText + divText;
+
+            });
+             var info = $('#allresults');
+	      info.html(htmlText);		
+              console.log(blocationData);
+	};
+    };
 function createCORSRequest(method, url) {
   var xhr = new XMLHttpRequest();
 
@@ -240,6 +308,12 @@ function createCORSRequest(method, url) {
 	
     </script> 
     <style>
+        .design-display
+        {
+            width : 100%;
+            height : 100px;
+            border-bottom: 0.25px grey solid;
+        }
     label.invalid
 {
     color: Red;
@@ -264,6 +338,52 @@ ul li:hover{
  cursor: pointer;
 }
 .top-buffer { margin-top:20px; }
+.results-section-wrapper {
+    display: inline-block;
+    width: 100%;
+    margin-top: 8px;
+}
+
+.results {
+    width: 90%;
+    height: 150px;
+    border: 1px solid #eaedef;
+    background-color: #ffffff;
+    display: inline-block;
+	font-weight: bold;
+	font-family: 'Aller', sans-serif;
+}
+
+.result-details {
+    width: 440px;
+    float: left;
+    margin: 18px 0 0 20px;
+    display: inline-block;
+    color: #333333;
+}
+.result-details-line{
+	display:block;
+	height:16px;
+}
+.result-title {
+    color: #333333;
+    font-size: 16px;
+    margin: 0;
+    line-height: 16px;
+    float: left;
+}
+.all-results {
+    /*display: inline-block;
+    margin-bottom: 30px;*/
+    width : 100%;
+}
+.results .title {
+    color: #333333;
+    font-size: 16px;
+    margin: 0;
+    line-height: 16px;
+    float: left;
+}
 </style>
     </head>
  <body  onLoad="initialize()">
@@ -282,28 +402,36 @@ ul li:hover{
           </div><!-- /input-group -->
         </div><!-- /.col-lg-6 -->
       </div> 
-      <div class="row top-buffer">
+      
+       
+       <div class="row top-buffer">
+          <div class="col-md-offset-1 col-md-8">
+            <div id="allresults" class="all-results">
+            </div>
+          </div>
+       </div>
+<!--      <div class="row top-buffer">
         <div class="panel panel-default">
-    <!-- Default panel contents -->
+     Default panel contents 
           <div class="panel-heading">Search Result</div>
-          <!-- Table -->
+           Table 
 		  <div class="container table-responsive">
           <table class="table table-striped" id="searchResultTable">
             <thead>
 				<tr>
-					<th data-toggle="true">Distance</th>
-					<th>Latitude</th>
-					<th>Longitude</th>
+					<th data-toggle="true">Location</th>
+					<th>Distance</th>
 					<th>UserId</th>
+                                        <th>TxnId</th>
+                                        <th>ServiceDate</th>
+                                        <th>Help</th>
+                                        <th>Message</th>
 				</tr>
 			</thead>
           </table>
 		  </div>
         </div>
-      </div> 
-	  <div class="row top-buffer col-lg-offset-5"> 
-	  <a type="button" class="btn btn-primary" id="createRequest" href="">Continue</a>
-	  </div>
+      </div> -->
   </div>
  </body>
 </html>                 
