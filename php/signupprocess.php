@@ -34,13 +34,12 @@ $host = "localhost";
 $user = "root"; 
 $pass = "blinx"; 
 $database = "blinx"; 
-
 $conn = mysqli_connect($host ,$user ,$pass ,$database ) or die("Error " . mysqli_error($link)); 
 try
 {
-$sql1="select count(*) from m_volunteer where phone=$phone1";
+$sql1="select count(*)  as count from m_volunteer where mobile_number='$phone1'";
 logToFile($sql1);
-$result = mysqli_query($conn,$sql);
+$result = mysqli_query($conn,$sql1);
 if (!$result) 
 {
   logToFile(mysql_error());
@@ -48,41 +47,39 @@ if (!$result)
 } 
 else 
 {
-	$row = mysql_fetch_row($result);
+	$count = mysqli_fetch_object($result)->count; 
         //logToFile((string)$row[0]);
-	if(intval($row[0])==0)
+	if(intval($count)==0)
 	{
-               
-                $sql2="select COALESCE(MAX(volunteer_id), 0) from m_volunteer";
+                $sql2="select COALESCE(MAX(volunteer_id), 0) as id from m_volunteer";
                 logToFile($sql2);
-                $result=mysql_query($sql2,$con);
-                if (!$result) 
+                $result1=mysqli_query($conn,$sql2);
+                
+                if (!$result1) 
                {
-                   logToFile(mysql_error());
-                   echo 'Failed Registration';
+                    echo "Failed Registration ($sql2) from DB: " . mysql_error();
                } 
                else
                {
-                       $row = mysql_fetch_row($result); 
-                       $bid=intval($row[0])+1;
-                       $phone1=intval($phone1);
-					   
+                       $id = mysqli_fetch_object($result1)->id; 
+                       $bid=intval($id)+1;
+                       logToFile($bid);
        		           $sql="INSERT INTO m_volunteer "
                                    . "(volunteer_id,"
                                    . "first_name,"
                                    . "last_name,"
                                    . "email_id,"
                                    . "mobile_number,"
-                                   . "lat,"
-                                   . "long,"
+                                   . "lati,"
+                                   . "longi,"
                                    . "cud,"
                                    . "create_time,"
                                    . "pwd)"
                                    . "VALUES"
                                    . "( $bid,'$firstname1',"
-                                   . "'$lastname1','$email1',$phone1,$place1','$place2','C',now(),'$pwd',)";
-                      // logToFile($sql);
- 		        if (!mysql_query($sql,$con))
+                                   . "'$lastname1','$email1','$phone1','$place1','$place2','C',now(),'$pwd')";
+                      logToFile($sql);
+ 		        if (!mysqli_query($conn,$sql))
 		        {
 		            logToFile(mysql_error());
                             echo 'Failed Registration';

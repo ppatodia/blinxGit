@@ -111,12 +111,12 @@
                 var pwd1= $("#passwd").val();
                 var dataString = 'firstname='+ firstname1+ '&lastname='+ lastname1+ 
                         '&phone=' + phone1 + '&email=' + email1+
-                        '&location1='+ latitude+ '&location2='+ longitude+
+                        '&latitude='+ latitude+ '&longitude='+ longitude+
                         '&paswd=' +  pwd1;
                         alert(dataString);
                         $.ajax({
                                 type: "POST",
-                                url: "signupprocess.php",
+                                url: "/Blinx/php/signupprocess.php",
                                 data: dataString,
                                 cache: false,
                                 success: function(msg)
@@ -180,6 +180,7 @@
                                 id="fname" 
                                 name="fname"
                                 maxlength="50" value="" tabindex="1"
+                                autocomplete="on"
                                 placeholder="First Name">
 	            </div>
 	        </div>
