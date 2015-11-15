@@ -16,11 +16,12 @@
 			var mphone=GetURLParameter('mphone');
 			var dataString = {'searchdata':mphone,'searchMethod':'0'};
 			$.ajax({
-            type: "POST",
-            url:"/Blinx/php/bsearch.php",
-			data:dataString,
-            dataType: "json",
-            success: function (msg) {
+                                       type: "POST",
+                                       url:"/Blinx/php/bsearch.php",
+                                       data:dataString,
+                                       dataType: "json",
+                            success: function (msg) 
+                            {
 					$('#firstname').val(msg.data[0]['first_name']);
 					$('#lastname').val(msg.data[0]['last_name']);
 					$('#useremail').val(msg.data[0]['email_id']);
@@ -34,13 +35,11 @@
 					$('#state').val(msg.data[0]['state']);
 					$('#district').val(msg.data[0]['district']);
 					$('#location').val(msg.data[0]['location']);
-					$('#address').val(msg.data[0]['address']);
-                }
-          });
-
-			
+                                        $('#address').val(msg.data[0]['address']);
+                            }
+              });
         }
-    </script>
+     </script>
 	<script type="text/javascript">
 	function GetURLParameter(sParam)
 	{
@@ -57,20 +56,15 @@
 	};
 	</script>
       <script>
-      /*$.validator.addMethod("regex", function(value, element, regexpr) {          
-    return regexpr.test(value);
-}, "Please enter a valid pasword.");
-      $.validator.addMethod("zipcode", function(value, element) {
-  return this.optional(element) || /^\d{6}(?:-\d{4})?$/.test(value);
-}, "Please provide a valid zipcode.");*/
-	  $(document).ready(function(){
+	  $(document).ready(function()
+          {
 	 	 $("#createRequest").on("click",function(evt){
 			evt.preventDefault();
 			var newURL = "/Blinx/beneficiary/newrequest.html?mphone="+$('#phone').val()+"&email="+$('#useremail').val()+"";
 			window.location = newURL;
 		});
-      });
-	  </script> 
+         });
+       </script> 
 	  <style>
 	  label.invalid
 {
@@ -102,12 +96,12 @@ ul li:hover{
   <div class="container">
     <form class="form-horizantal" id="requestform" name="requestform" method='post' action="">
      <div class="row">
-       <div class="col-md-12 col-md-offset-6"><h2>Benificiry Profile</h2></div>
+       <div class="col-md-offset-6"><h2>Beneficiary Profile</h2></div>
     </div>
       <div class="row">
    </div>
         <fieldset>
-           <legend>Benificiary Information</legend>
+           <legend>Beneficiary Information</legend>
             <div class="row" >
 	            <div class="offset5">
 	                <div class="form-group">

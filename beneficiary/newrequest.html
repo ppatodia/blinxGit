@@ -16,75 +16,60 @@
    <script type="text/javascript" src="/Blinx/bootstrap-3.3.5-dist/js/bootstrap-datetimepicker.min.js"></script>
 
     <script>
-    /*       var place2,place1;
-            function initialize() {
-            var input = document.getElementById('autocomplete');
-            var options = {componentRestrictions: {country: 'in'}};
-            var autocomplete=new google.maps.places.Autocomplete(input, options);
-			google.maps.event.addListener(autocomplete,'place_changed', function()
-{
-    /* Get place details */
-    /* place1 = autocomplete.getPlace().address_components[0].long_name;
-     place2= autocomplete.getPlace().address_components[1].long_name;
-    /* Do something with place information */
-/*});*/
-            
-		/*	$('#location').hide();
-		    $('#autocomplete').show();
-			$('#ruseremail').val(GetURLParameter('email'));
-			$('#rphone').val(GetURLParameter('mphone'));
-        }*/
-var Uid="";
-var place2;
-var latitude="";
-var place2;
-var longitude="";
+            var Uid="";
+            var place2;
+            var latitude="";
+            var place2;
+            var longitude="";
 	   function initialize()
 	   {
             var input = document.getElementById('autocomplete');
             var options = {componentRestrictions: {country: 'in'}};
             var autocomplete=new google.maps.places.Autocomplete(input, options);
             google.maps.event.addListener(autocomplete,'place_changed', function()
-{
-    /* Get place details */
-    var inputA = document.getElementById('autocomplete').value;
-     place1 = autocomplete.getPlace().address_components[0].long_name;
-     place2= autocomplete.getPlace().address_components[1].long_name;
-     var geocoder = new google.maps.Geocoder();
-            geocoder.geocode({
-            'address': inputA
-            }, function(results, status) {
-                if (status === google.maps.GeocoderStatus.OK) 
-                {
-                    latitude=results[0].geometry.location.lat();    
-                    longitude=results[0].geometry.location.lng(); 
-                    alert("Latitude: " + latitude + "\nLongitude: " + longitude);
-                }
-            });
-    /* Do something with place information */
-});
-                        FillHelpData();
-			FillCourseData();
-			$('#location').hide();
-		        $('#autocomplete').show();
-			$('#ruseremail').val(GetURLParameter('email'));
-			$('#rphone').val(GetURLParameter('mphone'));
-			var mphone=GetURLParameter('mphone');
-			var dataString = {'searchdata':mphone,'searchMethod':'0'};
-			$.ajax({
-            type: "POST",
-            url:"/Blinx/php/bsearch.php",
-			data:dataString,
-            dataType: "json",
-            success: function (msg) {
-					Uid=msg.data[0]['user_id'];
-					$('#ruseremail').val(msg.data[0]['email_id']);
-					$('#rphone').val(msg.data[0]['mobile_number']);
-					$('#location').val(msg.data[0]['location']);
-					$('#address').val(msg.data[0]['address']);
-                }
-          });
-       }
+               {
+                /*Get place details*/
+                var inputA = document.getElementById('autocomplete').value;
+                place1 = autocomplete.getPlace().address_components[0].long_name;
+                place2= autocomplete.getPlace().address_components[1].long_name;
+                var geocoder = new google.maps.Geocoder();
+                geocoder.geocode({
+                        'address': inputA
+                                 }, function(results, status) 
+                                 {
+                                        if (status === google.maps.GeocoderStatus.OK) 
+                                        {
+                                            latitude=results[0].geometry.location.lat();    
+                                            longitude=results[0].geometry.location.lng(); 
+                                            alert("Latitude: " + latitude + "\nLongitude: " + longitude);
+                                        }
+                                });
+                /*Do something with place information*/
+              });
+              FillHelpData();
+              FillCourseData();
+              FillDurationData();
+              $('#location').hide();
+              $('#autocomplete').show();
+              $('#ruseremail').val(GetURLParameter('email'));
+	      $('#rphone').val(GetURLParameter('mphone'));
+              var mphone=GetURLParameter('mphone');
+              var dataString = {'searchdata':mphone,'searchMethod':'0'};
+              $.ajax({
+                        type: "POST",
+                        url:"/Blinx/php/bsearch.php",
+                        data:dataString,
+                        dataType: "json",
+                        success: function (msg) 
+                        {
+                        	Uid=msg.data[0]['user_id'];
+				$('#ruseremail').val(msg.data[0]['email_id']);
+				$('#rphone').val(msg.data[0]['mobile_number']);
+				$('#location').val(msg.data[0]['location']);
+				$('#address').val(msg.data[0]['address']);
+                        }
+                    });
+            }
 
 	function GetURLParameter(sParam)
 	{
@@ -100,127 +85,73 @@ var longitude="";
 		}
 	};
 
-           function FillHelpData() {
+        function FillHelpData() 
+        {
 		$.ajax({
-            type: "POST",
-            url:"/Blinx/php/help.php",
-            dataType: "json",
-            success: function (msg) {
-                $.each(msg.data,function(key,value)
-               {	
-					$("#service").append($("<option></option>").val(value['Id']).html(value['Description']));
-               });  
-                }
-          });
+                            type: "POST",
+                            url:"/Blinx/php/help.php",
+                            dataType: "json",
+                            success: function (msg) 
+                            {
+                                $.each(msg.data,function(key,value)
+                                {	
+                                     $("#service").append($("<option></option>").val(value['Id']).html(value['Description']));
+                                });  
+                            }
+                    });
 	};
-
-	function FillCourseData() {
-   $.ajax({
-            type: "POST",
-            url:"/Blinx/php/coursedata.php",
-            dataType: "json",
-            success: function (msg) {
-                $.each(msg.data,function(key,value)
-               {
-                     $("#education").append($("<option></option>").val(value['Id']).html(value['Description']));
-                     //alert(data[i].Description);
-               });  
+        
+        function FillDurationData() 
+        {
+		var numbers = [1, 2, 3, 4, 5,6,7,8,9,10];
+                var option = '';
+                for (var i=0;i<numbers.length;i++){
+                   option += '<option value="'+ numbers[i] + '">' + numbers[i] + '</option>';
                 }
-          });
-};
+                $('#duration').append(option);
+	};
+	function FillCourseData() 
+        {
+            $.ajax({
+                    type: "POST",
+                    url:"/Blinx/php/coursedata.php",
+                    dataType: "json",
+                    success: function (msg) 
+                    {
+                        $.each(msg.data,function(key,value)
+                       {
+                             $("#education").append($("<option></option>").val(value['Id']).html(value['Description']));
+                             //alert(data[i].Description);
+                       });  
+                    }
+                });
+        };
 
-      /*$.validator.addMethod("regex", function(value, element, regexpr) {          
-    return regexpr.test(value);
-}, "Please enter a valid pasword.");
-      $.validator.addMethod("zipcode", function(value, element) {
-  return this.optional(element) || /^\d{6}(?:-\d{4})?$/.test(value);
-}, "Please provide a valid zipcode.");*/
-	  $(document).ready(function(){
+	  $(document).ready(function()
+          {
 	  var newDate = new Date();
-      newDate.setDate(newDate.getDate() + 180);
-	   $("#servicedate").datetimepicker({ format: 'DD-MM-YYYY hh:mm:ss'});
-	  //$('#servicedate').datetimepicker('setDate', new Date());
-	  /*
-	  $('#servicedate').datetimepicker().on('changeDate', function(ev){
-                 var requestedDate=$('#servicedate').val();
-				var today=new Date();
-                 var todaydate=new Date();
-                 todaydate.setDate(today.getDate());
-                 todaydate.setMonth(today.getMonth());
-                 todaydate.setYear(today.getFullYear());
-		 if(ev.date<=todaydate)
-                   {
-                        alert("Sorry requested should be greaterthan today date");
-                   }
-       });
-	   */
-	  /*$('#requestform').validate({
-        rules: {
-            rpincode: {
-
-				zipcode: true
-            },
-           servicedate: {
-				required: true
-            },
-            autocomplete: {
-				required: true
-            },
-        },
-		messages: {
-		rpincode: { required:"Please enter valid pincode"},
-		servicedate: { required:"Please enter valid service date"},
-		autocomplete: { required:"Your Location is required"},
-    },
-                errorClass:"invalid",
-				validClass: "success",
-				errorElement: "label",
-				submitHandler: function() {
-                    var bid= $("#bid").val();
-					var locatin= $("#location").val();
-					var locationarr = locatin.split(',');
-					var place1=locationarr[0];
-					var place2=locationarr[1];
-					var phone1= $("#rphone").val();
-					var email1= $("#useremail").val();
-                    var servicedate= $("#servicedate").val();
-					var address= $("#address").val();
-					var message= $("#message").val();
-                    var pincode1= $("#rpincode").val();
-                    var dataString = '&phone='+ phone1+ '&bid='+ bid+ '&helpdescription=' + $("#service option:selected").text()+ '&email=' + email1+'&address=' + address+'&requesteddate=' + servicedate;
-                                        dataString = dataString + '&location1='+ place1+ '&location2='+ place2+ '&pincode=' + pincode1+ '&message='+ message+'&helpvalue=' +  $("#service option:selected").val();
-                                        //alert(dataString);
-                                        $.ajax({
-							type: "POST",
-							url: "requestprocess.php",
-							data: dataString, 
-							success : function(msg) {
-                                                                                          alert(msg);
-                                                                                },
-                                                        error: function() {
-                                                                                        alert('failure');
-                                                                          },
-							 });
-				 
-				 	 }
-      });*/
-	  $('input:radio[name="communicationdata"]').change(
-      function(){
-       if ($(this).val() == 'existingaddress') {
-
-           $('#location').show();
-		    $('#autocomplete').hide();
-			$('#rphone').val(GetURLParameter('mphone'));
-			$('#ruseremail').val(GetURLParameter('email'));
-        }
-        else {
-			   $('#rphone').val('');
-			   $('#ruseremail').val('');
-			   $('#autocomplete').val('');
-			   $('#location').hide();
-		       $('#autocomplete').show();
-        } 
-      });
+          newDate.setDate(newDate.getDate() + 180);
+	  $("#servicedate").datetimepicker({ format: 'DD-MM-YYYY hh:mm:ss'});
+	  $('input:radio[name="communicationdata"]').change
+          (
+            function()
+            {
+                if ($(this).val() == 'existingaddress') 
+                {
+                    $('#location').show();
+                    $('#autocomplete').hide();
+                    $('#rphone').val(GetURLParameter('mphone'));
+                    $('#ruseremail').val(GetURLParameter('email'));
+                 }
+                else 
+                {
+                        $('#rphone').val('');
+                        $('#ruseremail').val('');
+                        $('#autocomplete').val('');
+                        $('#location').hide();
+                        $('#autocomplete').show();
+                } 
+           });
 	  $("#submit").on("click",function(evt){
 		evt.preventDefault();
 			//alert('click');
@@ -229,8 +160,10 @@ var longitude="";
 			var education = document.getElementById("education");
 			var a=document.getElementById("message");
 			var b=document.getElementById("address");
+                        var c=document.getElementById("duration");
 			var message=a.value;
 			var address=b.value;
+                        var time=c.value;
 			var strHelpID="";
 			var strEducationID="";
 			strHelpID = service.options[service.selectedIndex].value;
@@ -240,7 +173,7 @@ var longitude="";
 			'&phone=' + $('#rphone').val()+ '&helpId=' + strHelpID+'&message=' +message+
 			'&address=' + address +'&location1='+ place1+
 			'&location2='+ place2+ '&requesteddate=' + $("#servicedate").find("input").val()+
-			'&education=' +  strEducationID+ '&lat=' + latitude+'&long=' + longitude+'';
+			'&education=' +  strEducationID+ ' &duration=' +  time+ ' &lat=' + latitude+'&long=' + longitude+'';
 					//alert(dataString);
 			$.ajax({
 				url:"/Blinx/php/requestprocess.php",
@@ -261,108 +194,79 @@ var longitude="";
 
 	  </script> 
 	  <style>
-	  /*
-	  label.invalid
-{
-    color: Red;
-    font-style: italic;
-    padding: 1px;
-    margin: 0px 0px 0px 5px;
-}
-#.custom-search-form{
-    margin-top:5px;
-}
-row {
+.row {
     margin-top: 10px;
 }
-ul li{
- height: 30px;
- border: 1px solid #ccc;
- background: white;
- font-family: verdana;
- list-style-type: none;
- list-style-position: outside;
- list-style-image: none;
-}
-ul li:hover{
- background: lightblue;
- cursor: pointer;
-}
-*/
 </style>
     </head>
  <body onLoad="initialize()">
    <div class="container">
     <form class="form-horizantal" id="requestform" name="requestform" method='post' action="">
      <div class="row">
-       <div class="col-md-12 col-md-offset-6"><h2>New Request</h2></div>
+       <div class=" col-md-offset-6"><h2>New Request</h2></div>
     </div>
-      <div class="row"></div>
         <fieldset>
-            <legend>Request</legend>
-	        <div class="row">
-				<div class="offset5">
-					<div class="form-group">
-					 <label for="communicationdata" class="col-md-2">
-						Address:
-					  </label>
-					  <div class="col-md-10">
-						<label class="radio">
-						  <input type="radio" name="communicationdata" id="existing" value="existingaddress" checked>
-						  Use Registered data for communication
-						</label>
-						<label class="radio">
-						  <input type="radio" name="communicationdata" id="new" value="newaddress">
-						  Change communication data
-						</label>
-					  </div>
-					</div>
+	    <div class="row">
+                <div class="form-group"> 
+                         <label class="col-md-4">
+                            <input type="radio" name="communicationdata" id="existing" value="existingaddress" checked>
+                                      Use Registered information for communication
+			</label>
+			<label class="col-md-4">
+                            <input type="radio" name="communicationdata" id="new" value="newaddress">
+                            Change information for communication
+			</label>
+                </div>
+            </div>
+            <div class="row">
+                <label for="newRequest" class="col-md-2">Request Details:</label>
+            </div>
+            <div class="row">
+                        <div class="form-group">
+                            <label for="service" class="col-md-1">
+                                    Service Date:
+                            </label>
+                            <div class="col-md-5">
+                                    <div class='input-group date' id='servicedate'>
+                                        <input type='text' class="form-control" />
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-calendar"></span>
+                                            </span>
+                                    </div>
+                            </div>
+                                <label for="duration" class="col-md-1" >Duration(Hr) :</label>
+                                <div class="col-md-2">
+                                    <select name="duration" id="duration" class="form-control">
+                                    </select>
 				</div>
-			</div>
-	        <div class="row">
-				<div class="offset5">
-					<div class="form-group">
-					  <label for="service" class="col-md-1">
-						Service Date:
-					  </label>
-						<div class="col-md-5">
-						<div class='input-group date' id='servicedate'>
-							<input type='text' class="form-control" />
-							<span class="input-group-addon">
-								<span class="glyphicon glyphicon-calendar"></span>
-							</span>
-						</div>
-						</div>
-					  <label for="service" class="col-md-1">
-						Service:
-					  </label>
-					  <div class="col-md-5">
-						<select name="service" id="service" class="form-control">
-						</select>
-					  </div>
-					</div>
+				<label for="service" class="col-md-1">
+                                    Service:
+				</label>
+				 <div class="col-md-2">
+                                    <select name="service" id="service" class="form-control">
+                                    </select>
 				</div>
-			</div>
+                        </div>
+                    </div>
 	        <div class="row">
-			     <div class="offset5">
-					<div class="form-group">
-					   <label for="autocomplete" class="col-md-1">
-					    Location:
-						 </label>
-						 <div class="col-md-5">
-							<input type="text" class="form-control" id="autocomplete" name="autocomplete" placeholder="Choose Location">
-							<input type="text" class="form-control" id="location" name="location" placeholder="Choose Location">
-						 </div>
-						 <label for="rpincode" class="col-md-1">
-							Education:
-						 </label>
-						 <div class="col-md-5">
-							<select name="education" id="education" class="form-control">
-						</select>
-						 </div>
-					 </div>
+                    <div class="col-md">
+			<div class="form-group">
+                            <label for="autocomplete" class="col-md-1">
+				Location:
+                            </label>
+				<div class="col-md-5">
+                                    <input type="text" class="form-control" id="autocomplete" name="autocomplete" placeholder="Choose Location">
+                                    <input type="text" class="form-control" id="location" name="location" placeholder="Choose Location">
 				</div>
+				<label for="rpincode" class="col-md-1">
+                                    Education:
+				</label>
+                            <div class="col-md-5">
+				<select name="education" id="education" class="form-control"></select>
+                            </div>
 			</div>
+                    </div>
+		</div>
 	         <div class="row">
 				<div class="offset5">
 					 <div class="form-group">

@@ -21,13 +21,12 @@ function logToFile($msg)
 GetCityData();
 function GetCityData()
 {
-$host = "localhost"; 
+    $host = "localhost"; 
 $user = "root"; 
 $pass = "blinx"; 
 $database = "blinx"; 
 
 $conn = mysqli_connect($host ,$user ,$pass ,$database ) or die("Error " . mysqli_error($link)); 
-
 $sql = "SELECT Id,Description,IsUsed from f_help";
 
 $result = mysqli_query($conn,$sql);

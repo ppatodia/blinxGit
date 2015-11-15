@@ -31,8 +31,11 @@ $address= $_POST["address"];
 $education = $_POST["education"];
 $latitide = $_POST["lat"];
 $logitude = $_POST["long"];
-InsertBenificiaryData($Uid,$email,$phone,$helpdId,$requestdate,$place1,$place2,$address,$message,$education,$latitide,$logitude);
-function InsertBenificiaryData($Uid1,$email1,$phone1,$helpdId1,$requestdate1,$place1,$place2,$address1,$message1,$education1,$latitide1,$logitude1) 
+$duration = $_POST["duration"];
+InsertBenificiaryData($Uid,$email,$phone,$helpdId,$requestdate,
+        $place1,$place2,$address,$message,$education,$latitide,$logitude,$duration);
+function InsertBenificiaryData($Uid1,$email1,$phone1,$helpdId1,$requestdate1,
+        $place1,$place2,$address1,$message1,$education1,$latitide1,$logitude1,$duration1) 
 {
 try
 {
@@ -59,7 +62,11 @@ $conn = mysqli_connect($host ,$user ,$pass ,$database ) or die("Error " . mysqli
 						$requestdate1=date("Y-m-d H:i:s",strtotime($requestdate1));
 						$helpvalue1=intval($helpvalue1);
 						logToFile($requestdate1);
-       		        $sql="INSERT INTO t_help_request (Id,phone,email,UserId,helpId,Message,Address,Location,Requesteddate,Createddate,latitude,longitude)VALUES( $txnid,'$phone1','$email1',$Uid1,$helpdId1,'$message1','$address1','$place1','$requestdate1','$current_date','$latitide1','$logitude1')";
+       		        $sql="INSERT INTO t_help_request (Id,phone,email,UserId,helpId,Message,Address,"
+                                . "Location,Requesteddate,Createddate,latitude,longitude,Duration)"
+                                . "VALUES( $txnid,'$phone1','$email1',$Uid1,$helpdId1,"
+                                . "'$message1','$address1','$place1','$requestdate1',"
+                                . "'$current_date','$latitide1','$logitude1','$duration1')";
                      logToFile($sql);
  		        if (!mysqli_query($conn,$sql))
 		        {

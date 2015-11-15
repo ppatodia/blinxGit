@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      Main Page
+    </title>
+    <meta charset="utf-8">
+    <script type="text/javascript" src="/Blinx/bootstrap-3.3.5-dist/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/Blinx/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/Blinx/bootstrap-3.3.5-dist/js/jquery.validate.js"></script>
+    <script src="http://jquery.bassistance.de/validate/additional-methods.js"></script>
+    <link rel="stylesheet" href="../bootstrap-3.3.5-dist/css/bootstrap.min.css" type="text/css"/>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
+	<script>
+            var latitude='';
+            var longitude='';
+           function initialize()
+	   {
+               var input = document.getElementById('autocomplete');
+                var options = {componentRestrictions: {country: 'in'}};
+                var autocomplete=new google.maps.places.Autocomplete(input, options);
+            google.maps.event.addListener(autocomplete,'place_changed', function()
+            {
+                    var inputA = document.getElementById('autocomplete').value;
+                 var geocoder = new google.maps.Geocoder();
+                        geocoder.geocode({
+                        'address': inputA
+                        }, function(results, status) {
+                            if (status === google.maps.GeocoderStatus.OK) 
+                            {
+                                latitude=results[0].geometry.location.lat();    
+                                longitude=results[0].geometry.location.lng(); 
+                                
+                            }
+                        });
+            });
+           };
+</script>
+<script>
+        $.validator.addMethod('mypassword', function(value, element) 
+                {
+                    return this.optional(element) || (value.match(/[a-zA-Z]/) && value.match(/[0-9]/));
+                },
+                'Password must contain at least one numeric and one alphabetic character.');
+            $(document).ready(function()
+            {
+                 $('#regform').validate({
+                rules: 
+                {
+                        fname:
+                        {
+                                required: true,
+                                minlength: 2,
+                                maxlength: 50
+                        },
+                        lname:
+                        {
+                                required: true,
+                                minlength: 2,
+                                maxlength: 50
+                        },
+                        email:
+                        {
+                                required: true,
+                                minlength: 2,
+                                maxlength: 50
+                        },
+                        phone: 
+                        {
+                            required: true,
+                            minlength: 10
+                        },
+                        passwd: 
+                        {
+                            required: true,
+                            minlength: 6,
+                            maxlength: 10,
+                            mypassword:true
+                        },
+                        conpasswd:
+                        {
+                            required: true,
+                            minlength: 6,
+                            maxlength: 10,
+                            equalTo: "#passwd"
+                        },
+                        autocomplete:
+                        {
+                            required: true,
+                        },
+                },
+                messages: 
+                {
+                    fname: { required:"Firstname is required" ,regex:"Only Characters allowed" },
+                    lname: { required:"Lastname is required" ,regex:"Only Characters allowed" },
+                    email: { required:"Email is required" ,regex:"Oops! Not a valid Email!" },
+                    phone: { required:"Phone Number Required.",minlength:"Please enter valid phonenumber"},
+                    passwd: { required:"Password is required"},
+                    conpasswd: { required:"Confirm password is required"},
+                    autocomplete:{required:"Current place of residence is required"}
+                },
+                errorClass:"invalid",
+                validClass: "success",
+                errorElement: "label",
+                submitHandler: function() 
+                {
+                var firstname1= $("#fname").val();
+                var lastname1= $("#lname").val();
+                var phone1= $("#phone").val();
+                var email1= $("#email").val();
+                var pwd1= $("#passwd").val();
+                var dataString = 'firstname='+ firstname1+ '&lastname='+ lastname1+ 
+                        '&phone=' + phone1 + '&email=' + email1+
+                        '&location1='+ latitude+ '&location2='+ longitude+
+                        '&paswd=' +  pwd1;
+                        alert(dataString);
+                        $.ajax({
+                                type: "POST",
+                                url: "signupprocess.php",
+                                data: dataString,
+                                cache: false,
+                                success: function(msg)
+                                    {
+                                        alert(msg);
+                                        $("#firstname").val('');
+                                        $("#lastname").val('');
+                                        $("#phone").val('');
+                                        $("#useremail").val('');
+                                        $("#passwd").val('');
+                                        $("#conpasswd").val('');
+                                        $("#autocomplete").val('');
+                                    },
+                                    error: function() 
+                                    {
+                                        alert('Registration not successful');
+                                    },
+                                });
+
+            }
+        });
+      });
+    /*highlight: function (element) {
+        $(element).closest('.control-group').removeClass('success').addClass('error');
+    },
+    success: function (element) {
+        element.text('OK!').addClass('valid')
+            .closest('.control-group').removeClass('error').addClass('success');
+    }
+});
+        });*/
+	
+    </script> 
+    <style>
+        label.invalid
+        {
+            color: Red;
+            padding: 1px;
+            font-size: 12px;
+            font-weight: normal;
+            margin: 0px 0px 0px 45px;
+        }
+        secHeading{font-size:20px;font-weight:300;word-spacing:normal;letter-spacing:normal}
+    </style>
+ </head>
+ <body  onLoad="initialize()" style="height:100%">
+     <form method="POST"  class="form-horizontal" id="regform" action="">
+   <div class="container">
+       <div class="col-md-3"></div>
+       <div class="col-md-6" style="Background-color: #F8F8F8; margin-top:50px;">
+           <div class="control-group">
+               <h3 class="secHeading" style="text-align: center;
+                                            font-weight: bold;
+                                            ">Join Us</h3>
+            </div>
+                    <div class="control-group" style="margin-top:10px">
+	            <div class="controls">
+                        <input type="text" class="input-xlarge form-control" required="required"
+                               style="Height:30px;width:90%;margin-left:45px;
+                               border: 1px solid;  border-radius: 4px"
+                                id="fname" 
+                                name="fname"
+                                maxlength="50" value="" tabindex="1"
+                                placeholder="First Name">
+	            </div>
+	        </div>
+                <div class="control-group" style="margin-top:20px">
+               <input type="text" class="input-xlarge form-control"
+                                   style="Height:30px;width:90%;border: 1px solid;
+                                   margin-left:45px;
+                                   border-radius: 4px" 
+                                   id="lname" name="lname" placeholder="Last Name">
+           </div>
+	        <div class="control-group" style="margin-top:20px">
+	            <div class="controls">
+                        <input type="text" class="input-xlarge form-control" 
+                               style="Height:30px;width:90%;margin-left:45px;
+                               border: 1px solid;  border-radius: 4px;" id="email" name="email" placeholder="Email">
+	            </div>
+	        </div>
+                <div class="control-group" style="margin-top:20px">
+	            <div class="controls">
+	                    <input type="text" class="input-xlarge form-control"
+                                   style="Height:30px;width:90%;margin-left:45px;
+                                   border: 1px solid;  border-radius: 4px" id="phone" name="phone" placeholder="Mobile Number">
+	            </div>
+	        </div>
+	        <div class="control-group" style="margin-top:20px">
+	            <div class="controls">
+	                    <input type="Password" id="passwd" 
+                                   style="Height:30px;width:90%;margin-left:45px;
+                                   border: 1px solid;  border-radius: 4px" class="input-xlarge form-control" name="passwd" placeholder="Password">
+	            </div>
+	        </div>
+	        <div class="control-group" style="margin-top:20px">
+	            <div class="controls">
+	                    <input type="Password" id="conpasswd" 
+                                   style="Height:30px;width:90%;margin-left:45px;
+                                   border: 1px solid;  border-radius: 4px" class="input-xlarge form-control" name="conpasswd" placeholder="Re-enter Password">
+	            </div>
+	        </div>
+                <div class="control-group" style="margin-top:20px">
+	          <div class="controls">
+                      <input type="text"
+                             class="input-xlarge form-control"
+                             style="Height:30px;width:90%;margin-left:45px;
+                                   border: 1px solid;  border-radius: 4px"
+                             id="autocomplete"
+                             name="autocomplete"
+                             placeholder="Current Place of Residence">
+                  </div>
+                </div>
+	        <div class="control-group" style="margin-top:20px">
+	          <div class="controls">
+	           <button type="submit" class="btn btn-success submit" style="Height:30px;width:90%;margin-left:45px;
+                                   border: 1px solid;  border-radius: 4px" >JOIN US</button>
+	          </div>
+               </div>
+                <p class="" style="margin-top:10px; margin-left:50px " >
+		By signing up, I agree to the <a href="/termsOfUse" target="_blank">Terms of Service</a> and <a href="/privacy" target="_blank">Privacy Policy</a>.
+               </p>
+        </div>
+       <div class="col-md-3"></div>
+   </div>
+     </form>
+ </body>
+</html>           
