@@ -1,0 +1,23 @@
+USE blinx;
+
+insert into `f_education`(`Id`,`Description`,`IsUsed`) values (1,'Below SSLC',1);
+insert into `f_education`(`Id`,`Description`,`IsUsed`) values (2,'SSLC',1);
+insert into `f_education`(`Id`,`Description`,`IsUsed`) values (3,'Plus one',1);
+insert into `f_education`(`Id`,`Description`,`IsUsed`) values (4,'Plus Two',1);
+insert into `f_education`(`Id`,`Description`,`IsUsed`) values (5,'B.A',1);
+insert into `f_education`(`Id`,`Description`,`IsUsed`) values (6,'B.Arch',1);
+insert into `f_education`(`Id`,`Description`,`IsUsed`) values (7,'BCA',1);
+insert into `f_education`(`Id`,`Description`,`IsUsed`) values (8,'BBA',1);
+insert into `f_education`(`Id`,`Description`,`IsUsed`) values (9,'B.Com',1);
+insert into `f_education`(`Id`,`Description`,`IsUsed`) values (10,'B.Ed',1);
+insert into `f_education`(`Id`,`Description`,`IsUsed`) values (11,'BDS',1);
+insert into `f_education`(`Id`,`Description`,`IsUsed`) values (12,'BHM',1);
+insert into `f_education`(`Id`,`Description`,`IsUsed`) values (13,'B.Pharma',1);
+insert into `f_education`(`Id`,`Description`,`IsUsed`) values (14,'B.Sc',1);
+insert into `f_education`(`Id`,`Description`,`IsUsed`) values (15,'B.Tech/B.E',1);
+insert into `f_education`(`Id`,`Description`,`IsUsed`) values (16,'LLB',1);
+insert into `f_education`(`Id`,`Description`,`IsUsed`) values (17,'Diploma',1);
+insert into `f_education`(`Id`,`Description`,`IsUsed`) values (18,'MBBS',1);
+insert into `f_education`(`Id`,`Description`,`IsUsed`) values (19,'M.A',1);
+insert into `f_education`(`Id`,`Description`,`IsUsed`) values (20,'M.Arch',1);
+insert into `f_education`(`Id`,`Description`,`IsUsed`) values (21,'M.Com',1);
