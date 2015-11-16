@@ -121,7 +121,18 @@
                                 cache: false,
                                 success: function(msg)
                                     {
-                                        alert(msg);
+                                        if(msg.trim()=="2")
+                                        {
+                                            alert("Already Registered");
+                                        }
+                                        if(msg.trim()=="0")
+                                        {
+                                            alert("Failed to  Registered");
+                                        }
+                                        if(msg.trim()=="1")
+                                        {
+                                            alert("Registered successfully");
+                                        }
                                         $("#firstname").val('');
                                         $("#lastname").val('');
                                         $("#phone").val('');

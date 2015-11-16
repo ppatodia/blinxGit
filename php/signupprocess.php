@@ -16,7 +16,7 @@ function logToFile($msg)
    // open file
    $fd = fopen($filename, "a");
    // append date/time to message
-   $str = "[" . date("Y/m/d h:i:s", mktime()) . "] " . $msg; 
+   $str = "[" . date("Y/m/d h:i:s", time()) . "] " . $msg; 
    // write string
    fwrite($fd, $str . "\n");
    // close file
@@ -78,29 +78,31 @@ else
                                    . "VALUES"
                                    . "( $bid,'$firstname1',"
                                    . "'$lastname1','$email1','$phone1','$place1','$place2','C',now(),'$pwd')";
-                      logToFile($sql);
+                        logToFile($sql);
  		        if (!mysqli_query($conn,$sql))
 		        {
 		            logToFile(mysql_error());
-                            echo 'Failed Registration';
+                            mysqli_close($conn);
+                            echo '0';
 		        }
 		        else
 		        {
 			       logToFile("Registration Success");
-                                echo 'Registration Success';
+                               mysqli_close($conn);
+                               echo '1';
 		        }
               }
 	}
 else
 {
-          echo 'Already Registered';
+          echo '2';
 }
 }
 }
     catch(Exception $e)
    {
 		logToFile($e->getMessage());
-		logToFile(mysql_close($con));
+		logToFile(mysqli_close($conn));
                  echo 'fail';
    }
    
