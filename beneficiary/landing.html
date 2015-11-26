@@ -5,20 +5,35 @@
       Main Page
     </title>
     <meta charset="utf-8">
-    <script type="text/javascript" src="/Blinx/bootstrap-3.3.5-dist/js/jquery.min.js"></script>
-    <script type="text/javascript" src="/Blinx/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="../bootstrap-3.3.5-dist/css/bootstrap.min.css" type="text/css"/>
+	<link rel="stylesheet" href="../bootstrap-3.3.5-dist/css/bootstrap.min.css" type="text/css"/>
+	<link rel="stylesheet" href="../bootstrap-3.3.5-dist/css/font-awesome-4.5.0/css/font-awesome.min.css" type="text/css"/>
+    <script type="text/javascript" src="../bootstrap-3.3.5-dist/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
+    
 	<script>
            function initialize()
 	   {
            };
 
-  	$(document).ready(function(){
-            });
+		$(document).ready(function()
+		{
+			$("#abc").on("click", function()
+			 {
+				$('#result').load('E:/Data/Blinx/Blinx/beneficiary/about.html');
+			}); 
+		});
 	
     </script> 
     <style>
-        
+        .carousel-control.left, .carousel-control.right {
+    background-image: none
+}
+.mycontent-left {
+  border-right: 1px solid #333;
+}
+.mycontent-right {
+  border-left: 1px solid #333;
+}
     </style>
  </head>
  <body  onLoad="initialize()" style="height:100%">
@@ -33,24 +48,87 @@
              <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">About <span class="caret"></span></a>
               <ul class="dropdown-menu">
-                  <li><a href="#">About Blinx</a></li>
+                  <li><a id="abc" href="">About Blinx</a></li>
                   <li><a href="#">How Blinx Works</a></li>
                   <li><a href="#">Team</a></li>
-                  <li><a href="#">Contact Us</a></li>
+                 
               </ul>
               </li>
               <li><a href="../beneficiary/mainpage.php">Explore&Help</a></li>
-              <li><a href="#">Impact</a></li>
+              <li><a href="#">Contact Us</a></li>
+              <li><a href="#"><i class="fa fa-lg fa-facebook"></i></a></li>
+              <li><a href="#"><i class="fa fa-lg fa-twitter"></i></a></li>
               <li>
                   <button class='btn btn-primary navbar-btn' style="margin-right: 10px" type='button'>LOG IN</button>
               </li>
               <li>
-                <button type="button" class="btn btn-success navbar-btn">JOIN US</button>
+                <button type="button" class="btn btn-success navbar-btn" onClick="window.open('../beneficiary/join.html','_self');">JOIN US</button>
               </li>
           </ul>
           </div><!--/.nav-collapse -->
         </div><!--/.container-fluid -->
       </nav>
-   </div>
- </body>
+	</div>
+	<div class="container" id="result">
+	  <div id="myCarousel" class="carousel slide" data-ride="carousel" style="width: 100%; margin: 0 auto">
+			<!-- Carousel indicators -->
+			<ol class="carousel-indicators">
+				<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+				<li data-target="#myCarousel" data-slide-to="1"></li>
+				<li data-target="#myCarousel" data-slide-to="2"></li>
+			</ol>   
+			<!-- Wrapper for carousel items -->
+			<div class="carousel-inner">
+				<div class="item active">
+					<img class="img-responsive center-block" src="images/slide1.png" alt="First Slide">
+				</div>
+				<div class="item">
+					<img  class="img-responsive center-block" src="images/slide2.png" alt="Second Slide">
+				</div>
+				<div class="item">
+					<img class="img-responsive center-block" src="images/slide3.png" alt="Third Slide">
+				</div>
+			</div>
+			<!-- Carousel controls -->
+			<a class="carousel-control left" href="#myCarousel" data-slide="prev">
+				<span class="glyphicon glyphicon-chevron-left"></span>
+			</a>
+			<a class="carousel-control right" href="#myCarousel" data-slide="next">
+				<span class="glyphicon glyphicon-chevron-right"></span>
+			</a>
+		</div>
+		<div style="margin-top:50px" class="row">
+				<h2 style="font-family:courier">We're a not-for-profit organization committed to educate and change in visually Impaired lives
+				 by providing easy access to volunteers.</h2>
+		</div>
+		<div style="margin-top:50px;Background-color: #F8F8F8" class="row">
+				<div class="col-md-4">
+					<div class="mycontent-left">
+						<h2 class="text-center" style="font-size:26px font-weight: normal ">Join Us</h2>
+						<h4 class="text-center" >Join a network of volunteers</h4>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="mycontent-left">
+						<h2 class="text-center" style="font-size:26px font-weight: normal ">Choose Visually Impaired</h2>
+						<h4 class="text-center" >Choose near your location and convenient time</h4>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="">
+						<h2 class="text-center" style="font-size:26px font-weight: normal ">Help</h2>
+						<h4 class="text-center" >Meet and Help</h4>
+					</div>
+				</div>
+		</div>
+		<div style="margin-top:50px;Background-color: #FFFFFF" class="row">
+				<div class="text-center">
+					<button style="width:50%" type="button" class="btn btn-success navbar-btn">START NOW</button>
+				</div>
+		</div>
+	</div>
+		
+	 </body>
+
+		
 </html>          
