@@ -1,0 +1,301 @@
+<html>
+<head>
+<title>Another HTML page</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script type="text/javascript" src="/Blinx/bootstrap-3.3.5-dist/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/Blinx/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
+    <script async defer
+ src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&&callback=LoadGoogle"></script>
+    <link rel="stylesheet" href="../bootstrap-3.3.5-dist/css/bootstrap.min.css" type="text/css"/>
+<meta charset="utf-8">
+    <script>
+        var latitude='';
+        var longitude='';
+        var table;
+        var allLocations = [];
+        var allCoordenates=[];
+        var pointer=0;
+        var bData="";
+        var blocationData=[];
+        var htmlText = '';
+        var helpData='';
+        var filtertext=[];
+        function LoadGoogle()
+        {
+            $("#idLoading").hide();
+            $("#idContainer").show();
+            //alert("Loaded");
+            var input = document.getElementById('autocomplete');
+            var options = {componentRestrictions: {country: 'in'}};
+            var autocomplete=new google.maps.places.Autocomplete(input, options);
+            google.maps.event.addListener(autocomplete,'place_changed', function()
+            {
+                var inputA = document.getElementById('autocomplete').value;
+                var geocoder = new google.maps.Geocoder();
+                geocoder.geocode({
+                'address': inputA
+                }, function(results, status) {
+                    if (status === google.maps.GeocoderStatus.OK) 
+                    {
+                        latitude=results[0].geometry.location.lat();    
+                        longitude=results[0].geometry.location.lng(); 
+                    }
+                });
+            });
+        };
+        function FillHelpData() 
+        {
+            var filterText = '';
+            $.ajax({
+                    type: "POST",
+                    url:"/Blinx/php/help.php",
+                    data: {filter: "help"},
+                    dataType: "json",
+                    success: function (msg) 
+                    {
+                       filterText = '';
+                       $.each(msg.data,function(key,value)
+                        {
+
+                            var filterValue='<input type="checkbox" onclick="onChange(event)" id="check' + value['Id'] + '" \n\
+                            name="check' + value['Id'] + '"><label for="lcheck' + value['Id'] + '" \n\
+                            class="Filterlabel">'+ value['Description'] +'</label></input><br>';  
+                            filterText = filterText + filterValue;
+                        });
+                        var info = $('#serviceTypeFilter');
+                        info.html(filterText);
+                        }
+                    });
+        };
+        function FillDate()
+        {
+            var filterText = '';
+            $.ajax({
+                        type: "POST",
+                        url:"/Blinx/php/help.php",
+                        data: {filter: "date"},
+                        dataType: "json",
+                        success: function (msg) 
+                        {
+                            filterText = '';
+                           $.each(msg.data,function(key,value)
+                {
+
+                            var filterValue='<input type="checkbox" id="check' + value['Id'] + '" \n\
+                            name="check' + value['Id'] + '"><label for="check' + value['Id'] + '" \n\
+                            class="Filterlabel">'+ value['Description'] +'</label></input><br>';  
+                            filterText = filterText + filterValue;
+
+
+                });
+                var info = $('#dateFilter');
+                            info.html(filterText);
+                        }
+                });
+        }
+        function DisplayData(displayData)
+        {
+            
+            htmlText = '';
+            var info = $('#allresults');
+            info.html(htmlText);
+            //console.log(displayData);
+            $.each(displayData,function(key,value)
+                         {
+                            var divText="<div class='design-display' ><div style='width : 90%; float:left; color:#AAAAAA'>"+
+                             "<div> <span style='font-size: 20px;color:#000000'>"+displayData[key].Name+"</div>"+
+                             "<div> <span style='font-size: 14px;color:#AAAAAA'> Type of service : </span> "+
+                             "<span style='margin-right: 10px ; font-size: 14px;color:#000000'>"+displayData[key].Description+"</span>"+
+                             "<span style='font-size: 14px;color:#AAAAAA'>Service Date : </span>"+
+                             "<span style='font-size: 14px;color:#000000'>"+displayData[key].Requesteddate+"</span>"+
+                             "</div>"+
+                             "<div>"+displayData[key].Address+"</div>"+
+                             "<div>"+displayData[key].Message+"</div>"+
+                             "</div>"+
+                            "<button class='btn btn btn-success' type='button' style='float : left; margin-top:30px;'>Accept</button></div>";
+                            htmlText = htmlText + divText;
+                        });
+                     //console.log(htmlText);       
+                            info.html(htmlText);		
+            
+        }
+        function LoadData(latitide1,longitude1 )
+        {
+            var dataString = {'lat':latitide1,'lng':longitude1};
+            $.ajax({
+                    url:"/Blinx/php/blocationsearch.php",
+                    type: "POST",
+                    datatype: "json",
+                    data:dataString,
+                    success: function (msg) 
+                    {
+                        var JSONObject = JSON.parse(msg);
+                        bData=JSONObject["data"];
+                        DisplayData(bData);
+                    },
+                    error: function(error)
+                    {
+                       console.log('ERROR',error);
+                    }
+                });
+
+        };
+        function onChange(ss)
+        {
+            
+            var checkedValue=$(ss.target).prop('checked');
+            if(checkedValue==true)
+            {
+                var b = $(ss.target).next();
+                var c=b.text();
+                console.log(c);
+                filtertext.push(c);
+                console.log(bData);;
+                if(checkedValue==true)
+                {
+                    var returnedData = $.grep(bData, function (element, index) {
+                    return $.inArray(element.Description,filtertext)>-1 ;
+                });
+                   console.log(bData);
+                   DisplayData(returnedData);
+                    //alert(returnedData[0].id + "  " + returnedData[0].category);
+                }
+            }
+                
+            //console.log(ss);
+        }
+        $(document).ready(function()
+        {
+            $("#idContainer").hide();
+            //
+            FillHelpData();
+            FillDate();
+            LoadData("","");
+            $("#btnsearch").click(function () 
+            {
+            /*var dataString = {'lat':latitude,'lng':longitude};*/
+                LoadData(latitude,longitude);
+            /*var dataString = {'lat':'12.9381776','lng':'77.62282519999997'};*/
+            });
+            /*$('input:checkbox').change(function () 
+            {
+                alert("AA")
+            });*/
+        }); 
+
+    </script>
+    <style>
+            .design-display
+            {
+                width : 100%;
+                height : 100px;
+                border-bottom: 0.25px grey solid;
+            }
+            label.invalid
+            {
+                color: Red;
+                font-style: italic;
+                padding: 1px;
+                margin: 0px 0px 0px 5px;
+            }
+            .row {
+                margin-top: 10px;
+            }
+            .Filterlabel {
+            color: #AAAAAA;
+            font-size: 12px;
+            margin-left: 10px;
+            }
+            .col{
+            margin-bottom: -999px;
+            padding-bottom: 999px;
+            }
+            .top-buffer { margin-top:20px; }
+            .results-section-wrapper {
+                display: inline-block;
+                width: 100%;
+                margin-top: 8px;
+            }
+
+            .results {
+                width: 90%;
+                height: 150px;
+                border: 1px solid #eaedef;
+                background-color: #ffffff;
+                display: inline-block;
+                    font-weight: bold;
+                    font-family: 'Aller', sans-serif;
+            }
+
+            .result-details {
+                width: 440px;
+                float: left;
+                margin: 18px 0 0 20px;
+                display: inline-block;
+                color: #333333;
+            }
+            .result-details-line{
+                    display:block;
+                    height:16px;
+            }
+            .result-title {
+                color: #333333;
+                font-size: 16px;
+                margin: 0;
+                line-height: 16px;
+                float: left;
+            }
+            .all-results {
+                /*display: inline-block;*/
+                margin-left: 30px;
+                width : 100%;
+            }
+            .results .title {
+                color: #333333;
+                font-size: 16px;
+                margin: 0;
+                line-height: 16px;
+                float: left;
+            }
+    </style>
+</head>
+
+<body bgcolor="#FFFFFF"  style="height:100%">
+    <div id="idLoading">Loading, please wait a while.</div>
+  <div id="idContainer" class="container">
+      <div class="row">
+         <div class="col-md-12" ><h2>Choose Visually Impaired by your choice</h2></div>
+         <hr>
+      </div>
+      <div class="row top-buffer">
+        <div>
+          <div class="input-group">
+            <input type="text" class="form-control" id="autocomplete" name="autocomplete" placeholder="Choose Location">
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button" id="btnsearch">Search</button>
+            </span>
+          </div><!-- /input-group -->
+        </div><!-- /.col-lg-6 -->
+      </div> 
+       <div class="row top-buffer">
+           <div class="col-md-2" style="Background-color: #F8F8F8;" >
+               <p  style="color:#00000; margin-top:10px; font-weight: bold; ">FILTERS</p>
+               <hr>
+               <p  style="color:#00000; margin-top:10px; font-weight: normal;  ">Help Purpose</p>
+               <div id="serviceTypeFilter" style="margin-top:10px;" class="">
+                   
+              </div>
+               <hr>
+               <p  style="color:#00000; margin-top:10px; font-weight: normal;  ">Date</p>
+               <div id="dateFilter" style="margin-top:10px;" class="">
+                   
+              </div>
+            </div>
+           <div class="col-md-8">
+               <div id="allresults" class="all-results"></div>
+           </div>
+           <div class="col-md-2"></div>
+        </div>
+      </div>
+</body>
+</html>

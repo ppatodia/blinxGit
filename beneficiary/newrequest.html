@@ -90,6 +90,7 @@
 		$.ajax({
                             type: "POST",
                             url:"/Blinx/php/help.php",
+                            data: {filter: "help"},
                             dataType: "json",
                             success: function (msg) 
                             {

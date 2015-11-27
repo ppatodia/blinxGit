@@ -30,7 +30,27 @@ $user = "root";
 $pass = "blinx"; 
 $database = "blinx"; 
 $conn = mysqli_connect($host ,$user ,$pass ,$database ) or die("Error " . mysqli_error($link)); 
-$query = "SELECT  ( 3959 * acos( cos( radians($lat1) ) * "
+if($lat1=="" && $lng1=="" )
+{
+    logToFile("No Latitude");
+    $query ="SELECT UserId,
+       t.Id,
+       helpId,
+       h.Description,
+       CONCAT(u.first_name, ' ', u.last_name) AS Name,
+       t.Address,
+       Requesteddate,
+       Message
+  FROM t_help_request t
+       INNER JOIN f_help h ON t.helpId = h.Id
+       INNER JOIN m_user u ON u.user_id = t.UserId
+Where DATEDIFF(NOW(),Requesteddate)<100
+ORDER BY Requesteddate asc
+ LIMIT 0, 20";
+    
+}
+ else {
+    $query = "SELECT  ( 3959 * acos( cos( radians($lat1) ) * "
         . "cos( radians( latitude ) ) * cos( radians( longitude ) - radians($lng1) ) + sin( radians($lat1) ) * "
         . "sin( radians( latitude ) ) ) ) AS distance,latitude,longitude,UserId,"
         . "t.Id,helpId,h.Description,CONCAT(u.first_name, ' ' ,u.last_name) as Name, t.Address,"
@@ -38,6 +58,8 @@ $query = "SELECT  ( 3959 * acos( cos( radians($lat1) ) * "
         . " FROM t_help_request t inner join f_help h  on t.helpId=h.Id   "
         . " inner join m_user u on u.user_id=t.UserId "
         . " HAVING distance < 10 ORDER BY distance LIMIT 0 , 20";
+}
+
 $sql=$query;
 logToFile($sql);
 $result = mysqli_query($conn,$sql);

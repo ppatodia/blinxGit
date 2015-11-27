@@ -5,25 +5,35 @@
       Main Page
     </title>
     <meta charset="utf-8">
-	<link rel="stylesheet" href="../bootstrap-3.3.5-dist/css/bootstrap.min.css" type="text/css"/>
-	<link rel="stylesheet" href="../bootstrap-3.3.5-dist/css/font-awesome-4.5.0/css/font-awesome.min.css" type="text/css"/>
+    <link rel="stylesheet" href="../bootstrap-3.3.5-dist/css/bootstrap.min.css" type="text/css"/>
+    <link rel="stylesheet" href="../bootstrap-3.3.5-dist/css/font-awesome-4.5.0/css/font-awesome.min.css" type="text/css"/>
     <script type="text/javascript" src="../bootstrap-3.3.5-dist/js/jquery.min.js"></script>
     <script type="text/javascript" src="../bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
     
 	<script>
-           function initialize()
-	   {
-           };
+            function initialize()
+            {
+            };
 
-		$(document).ready(function()
-		{
-			$("#abc").on("click", function()
-			 {
-				$('#result').load('E:/Data/Blinx/Blinx/beneficiary/about.html');
-			}); 
-		});
+            $(document).ready(function()
+            {
+                    $("#abc").on("click", function()
+                     {
+                            $('#result').load('about.html');
+                    }); 
+            });
 	
-    </script> 
+            function showDiv()
+               {
+                   //document.getElementById("formpage").innerHTML='<object type="text/html" data="mainpage.html" ></object>';
+                   $('#result').load('newhtml.html');
+               }
+               function showLogin()
+               {
+                   //document.getElementById("formpage").innerHTML='<object type="text/html" data="mainpage.html" ></object>';
+                   $('#result').load('login.html');
+               }
+        </script>
     <style>
         .carousel-control.left, .carousel-control.right {
     background-image: none
@@ -54,12 +64,12 @@
                  
               </ul>
               </li>
-              <li><a href="../beneficiary/mainpage.php">Explore&Help</a></li>
+              <li><a href="#" onclick="showDiv()" >Explore&Help</a></li>
               <li><a href="#">Contact Us</a></li>
               <li><a href="#"><i class="fa fa-lg fa-facebook"></i></a></li>
               <li><a href="#"><i class="fa fa-lg fa-twitter"></i></a></li>
               <li>
-                  <button class='btn btn-primary navbar-btn' style="margin-right: 10px" type='button'>LOG IN</button>
+                  <button class='btn btn-primary navbar-btn' onclick="showLogin()" style="margin-right: 10px" type='button'>LOG IN</button>
               </li>
               <li>
                 <button type="button" class="btn btn-success navbar-btn" onClick="window.open('../beneficiary/join.html','_self');">JOIN US</button>
@@ -70,7 +80,7 @@
       </nav>
 	</div>
 	<div class="container" id="result">
-	  <div id="myCarousel" class="carousel slide" data-ride="carousel" style="width: 100%; margin: 0 auto">
+                <div id="myCarousel" class="carousel slide" data-ride="carousel" style="width: 100%; margin: 0 auto">
 			<!-- Carousel indicators -->
 			<ol class="carousel-indicators">
 				<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
@@ -127,7 +137,7 @@
 				</div>
 		</div>
 	</div>
-		
+		  
 	 </body>
 
 		
