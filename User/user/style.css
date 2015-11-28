@@ -1,0 +1,19 @@
+body
+{
+	background-color:#000000;
+}
+
+.main
+{
+	top:100px;
+	padding:20px;
+	margin:0 auto;
+	width:800px;
+	background-color:#ffffff;
+}
+
+.heading
+{
+	position:absolute;
+	text-align:center;
+}
